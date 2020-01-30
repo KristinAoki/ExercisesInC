@@ -1,34 +1,40 @@
 /*
- * Program to evaluate face values.
- * Released under the Vegas Public License.
- * (c)2014 The College Blackjack Team.
+ *
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 
 int card_count(int val) {
-
-  /* Check if the value is 3 to 6 */
+  /*
+   * .
+   */
   if ((val >= 3) && (val<= 6)) {
     return 1;
   }
-  /* Otherwise check if the card was 10, J, Q, K */
   else if (val == 10) {
     return -1;
   }
   return 0;
 }
 void user_input(char *card_name) {
+  /*
+   *
+   */
   puts("Enter the card_name: ");
   scanf("%2s", card_name);
 }
 
 void card_value(char *card_name) {
+  /*
+   * Program to evaluate face values.
+   * Released under the Vegas Public License.
+   * (c)2014 The College Blackjack Team.
+   */
   int count = 0;
+  int val = 0;
   while (card_name[0] != 'X') {
     user_input(card_name);
-    int val = 0;
     switch (card_name[0]) {
       case 'K':
       case 'Q':
@@ -53,6 +59,11 @@ void card_value(char *card_name) {
 }
 
 int main() {
+  /*
+   * Program to evaluate face values.
+   * Released under the Vegas Public License.
+   * (c)2014 The College Blackjack Team.
+   */
   char card_name[3];
   card_value(card_name);
   return 0;
