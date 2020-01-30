@@ -19,12 +19,12 @@ int card_count(int val) {
   }
   return 0;
 }
-char *user_input(char *card_name) {
+void user_input(char *card_name) {
   puts("Enter the card_name: ");
   scanf("%2s", card_name);
 }
 
-int card_value(char *card_name) {
+void card_value(char *card_name) {
   int count = 0;
   while (card_name[0] != 'X') {
     user_input(card_name);
