@@ -7,13 +7,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
-{
-  char card_name[3];
+int card_count(int val) {
+
+  /* Check if the value is 3 to 6 */
+  if ((val >= 3) && (val<= 6)) {
+    return 1;
+  }
+  /* Otherwise check if the card was 10, J, Q, K */
+  else if (val == 10) {
+    return -1;
+  }
+  return 0;
+}
+char *user_input(char *card_name) {
+  puts("Enter the card_name: ");
+  scanf("%2s", card_name);
+}
+
+int card_value(char *card_name) {
   int count = 0;
   while (card_name[0] != 'X') {
-    puts("Enter the card_name: ");
-    scanf("%2s", card_name);
+    user_input(card_name);
     int val = 0;
     switch (card_name[0]) {
       case 'K':
@@ -28,16 +42,18 @@ int main()
         continue;
       default:
         val = atoi(card_name);
+        if ((val < 1) || (val > 10)) {
+          puts("I don't understand that value");
+          continue;
+        }
     }
-    /* Check if the value is 3 to 6 */
-    if ((val >= 3) && (val<= 6)) {
-      count++;
-    }
-    /* Otherwise check if the card was 10, J, Q, K */
-    else if (val == 10) {
-      count--;
-    }
+    count += card_count(val);
     printf("Current count: %i\n", count);
   }
-    return 0;
+}
+
+int main() {
+  char card_name[3];
+  card_value(card_name);
+  return 0;
 }
