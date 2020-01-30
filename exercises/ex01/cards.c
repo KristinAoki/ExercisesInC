@@ -1,14 +1,19 @@
 /*
- *
+ * Worked with Shreya Chowdhardy
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+ * Adjusts the card count depending on the value inputed.
+ * If the value is between 2 and 7, it will add 1 to the count.
+ * If the value is equal to 10, it will subtract 1 from the count.
+ *
+ * val: the value of the card
+ */
 int card_count(int val) {
-  /*
-   * .
-   */
+
   if ((val >= 3) && (val<= 6)) {
     return 1;
   }
@@ -17,20 +22,26 @@ int card_count(int val) {
   }
   return 0;
 }
+
+/*
+ * Prompts user to input a card name
+ * card_name: buffer where card_name is stored
+ */
 void user_input(char *card_name) {
-  /*
-   *
-   */
+
   puts("Enter the card_name: ");
   scanf("%2s", card_name);
 }
 
+/*
+ * Determines the value of a card based on the user input.
+ * After assigning value to the card, it determines if the count is adjusted
+ *  or if the value is not recognized.
+ * count: the count of cards
+ * val: the value of the card
+ */
 void card_value(char *card_name) {
-  /*
-   * Program to evaluate face values.
-   * Released under the Vegas Public License.
-   * (c)2014 The College Blackjack Team.
-   */
+
   int count = 0;
   int val = 0;
   while (card_name[0] != 'X') {
@@ -58,12 +69,11 @@ void card_value(char *card_name) {
   }
 }
 
+/*
+ * Initializes length of card_name array and runs card_value.
+ */
 int main() {
-  /*
-   * Program to evaluate face values.
-   * Released under the Vegas Public License.
-   * (c)2014 The College Blackjack Team.
-   */
+
   char card_name[3];
   card_value(card_name);
   return 0;
