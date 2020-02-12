@@ -41,6 +41,8 @@ void find_track_regex(char pattern[])
     // TODO: fill this in
     regex_t regex;
     int error = regcomp(&regex, pattern, 0);
+    /* Checks to see if the pattern is valid
+     * if it is false, it will print an error message */
     if (error) {
       printf("Error: Could not compile exit program\n");
       exit(1);
@@ -48,12 +50,14 @@ void find_track_regex(char pattern[])
 
     for (int i = 0; i < NUM_TRACKS; i++) {
       int result = regexec(&regex, tracks[i], 0, NULL, 0);
+      /* Checks to see if the pattern is found in the track title
+       * if the pattern is found print track name and number otherwise print
+       * print track and error message */
       if (!result) {
         printf("Track number: %i\n", i);
         printf("Track name: %s\n", tracks[i]);
       } else {
         printf("Track number: %i\nTrack name does not match pattern\n", i);
-
       }
     }
     regfree(&regex);
