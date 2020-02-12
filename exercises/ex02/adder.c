@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ARRAY_LENGTH 5
+#define ARRAY_LENGTH 100
 #define BUFFER 32
 
  // Global variables
@@ -29,6 +29,7 @@ int get_number(char* num) {
   if (strlen(num) >= BUFFER) {
     printf("Error: Input string exceeds allocated space\n");
   }
+  return n;
 }
 
 /*
