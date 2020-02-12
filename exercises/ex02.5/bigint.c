@@ -33,8 +33,27 @@ s: string
 returns: string
 */
 char *reverse_string(char *s) {
-    //TODO: Fill this in.
-    return "";
+    //TODO: Fill this in
+    // Storing the length of s in a local variable len
+    int len = strlen(s);
+    // Duplicating s
+    char *rev = strdup(s);
+
+    int start = 0;
+    int end = len-1;
+
+    while (start < end) {
+      // Save the start element of rev
+      char start_char = rev[start];
+      // Set the end element of rev to the start element
+      rev[start] = rev[end];
+      // Set the original start element of rev to the end element
+      rev[end] = start_char;
+
+      start ++;
+      end --;
+    }
+    return rev;
 }
 
 /* ctoi: Converts a character to integer.
@@ -54,12 +73,27 @@ returns: character '0' to '9'
 */
 char itoc(int i) {
     //TODO: Fill this in, with an appropriate assertion.
-    return '0';
+    /* When a user inputs an integer from 0 - 9 the corresponding case returns
+     * that iteger as a character.
+     */
+    switch (i) {
+      case 0: return '0';
+      case 1: return '1';
+      case 2: return '2';
+      case 3: return '3';
+      case 4: return '4';
+      case 5: return '5';
+      case 6: return '6';
+      case 7: return '7';
+      case 8: return '8';
+      case 9: return '9';
+      default: return 'n';
+    }
 }
 
-/* add_digits: Adds two decimal digits, returns the total and carry.
+/* add_digits: Adds three decimal digits, returns the total and carry.
 
-For example, if a='5', b='6', and carry='1', the sum is 12, so
+For example, if a='5', b='6', and c='1', the sum is 12, so
 the output value of total should be '2' and carry should be '1'
 
 a: character '0' to '9'
@@ -71,6 +105,20 @@ carry: pointer to char
 */
 void add_digits(char a, char b, char c, char *total, char *carry) {
     //TODO: Fill this in.
+    // Converting the input characters to integers
+    int int_a = ctoi(a);
+    int int_b = ctoi(b);
+    int int_c = ctoi(c);
+
+    int sum = int_a + int_b + int_c;
+
+    /*Convert sum to characters
+     * Total is the ones place of the sum, so you divide by ten and return the
+     *  remainder.
+     * Carry is the tens place of the sum, so you divide by ten.
+     */
+    *total = itoc(sum%10);
+    *carry = itoc(sum/10);
 }
 
 /* Define a type to represent a BigInt.
@@ -205,6 +253,6 @@ int main (int argc, char *argv[])
 
     //TODO: When you have the first three functions working,
     //      uncomment the following, and it should work.
-    // test_add_bigint();
+    test_add_bigint();
     return 0;
 }
