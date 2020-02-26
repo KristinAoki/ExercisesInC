@@ -141,7 +141,7 @@ int recv_dgram ()
   ssize_t n;
   struct ip *ip;
   int maxfdp1 = max (recvfd, pipefd[0]) + 1;
-  fd_set rset[1];  
+  fd_set rset[1];
   FD_ZERO (rset);
 
   alarm(3);       /* set the timeout alarm to handle dropped packets */
@@ -204,7 +204,7 @@ void print_report ()
   int stat;
   double rtt, krtt;
   char str[NI_MAXHOST];
-      
+
   stat = sock_cmp_addr (sarecv, salast, salen);
 
   /* if this reply comes from source different from the previous
@@ -263,7 +263,7 @@ void send_dgram (int ttl)
    fill in the timestamps.  I am assuming that they don't have
    any actual effect. */
 
-int send_probes (int ttl) 
+int send_probes (int ttl)
 {
   int i, probe, code, done;
 
@@ -330,47 +330,46 @@ void loop_ttl ()
   }
 }
 
-int main (int argc, char **argv)
-{
-  int c;
-  struct addrinfo *ai;
-  char *host;
-
-  opterr = 0;
-  while ( (c = getopt (argc, argv, "m:")) != -1) {
-    switch (c) {
-    case 'm':
-      if ( (max_ttl = atoi(optarg)) <= 1) {
-	err_quit ("invalid -m value");
-      }
-      break;
-    default:
-      err_quit ("unrecognizd option: %c", c);
-    }
-  }
-
-  if (optind != argc - 1) {
-    err_quit ("usage: trout [ -m <maxttl>] <hostname>");
-  }
-  host = argv[optind];
-  ai = Host_serv (host, NULL, 0, 0);
-
-  printf ("trout to %s (%s): %d hops max, %d data bytes\n",
-	  ai->ai_canonname,
-	  Sock_ntop_host (ai->ai_addr, ai->ai_addrlen),
-	  max_ttl, datalen);
-
-  if (ai->ai_family != AF_INET) {
-    err_quit ("unknown address family %d", ai->ai_family);
-  }
-
-  sasend = ai->ai_addr;
-  salen = ai->ai_addrlen;
-  sarecv = Calloc (1, salen);
-  salast = Calloc (1, salen);
-  sabind = Calloc (1, salen);
-
-  loop_ttl ();
-  exit (0);
-}
-
+// int main (int argc, char **argv)
+// {
+//   int c;
+//   struct addrinfo *ai;
+//   char *host;
+//
+//   opterr = 0;
+//   while ( (c = getopt (argc, argv, "m:")) != -1) {
+//     switch (c) {
+//     case 'm':
+//       if ( (max_ttl = atoi(optarg)) <= 1) {
+// 	err_quit ("invalid -m value");
+//       }
+//       break;
+//     default:
+//       err_quit ("unrecognizd option: %c", c);
+//     }
+//   }
+//
+//   if (optind != argc - 1) {
+//     err_quit ("usage: trout [ -m <maxttl>] <hostname>");
+//   }
+//   host = argv[optind];
+//   ai = Host_serv (host, NULL, 0, 0);
+//
+//   printf ("trout to %s (%s): %d hops max, %d data bytes\n",
+// 	  ai->ai_canonname,
+// 	  Sock_ntop_host (ai->ai_addr, ai->ai_addrlen),
+// 	  max_ttl, datalen);
+//
+//   if (ai->ai_family != AF_INET) {
+//     err_quit ("unknown address family %d", ai->ai_family);
+//   }
+//
+//   sasend = ai->ai_addr;
+//   salen = ai->ai_addrlen;
+//   sarecv = Calloc (1, salen);
+//   salast = Calloc (1, salen);
+//   sabind = Calloc (1, salen);
+//
+//   loop_ttl ();
+//   exit (0);
+// }
