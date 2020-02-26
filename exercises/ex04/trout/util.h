@@ -18,6 +18,7 @@
 #include <sys/un.h>
 #include <stdarg.h>
 #include <syslog.h>
+#include <unistd.h>
 
 void err_doit (int errnoflag, int level, char *fmt, va_list ap);
 void err_sys (char *fmt, ...);
