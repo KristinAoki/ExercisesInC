@@ -173,7 +173,7 @@ double time_to_double (Timeval *time)
 void print_report ()
 {
   int stat;
-  double rtt, krtt;
+  double rtt;
   char str[NI_MAXHOST];
 
   stat = sock_cmp_addr (sarecv, salast, salen);
@@ -236,7 +236,7 @@ void send_dgram (int ttl)
 
 int send_probes (int ttl)
 {
-  int i, probe, code, done;
+  int probe, code, done;
 
   Setsockopt (sendfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
   bzero (salast, salen);
