@@ -1,4 +1,5 @@
 #include "trout.h"
+#include "util.h"
 
 /* NOTES: system calls beginning with a capital letter are Stevens's
    wrapper functions.  Each one invokes the method and checks the

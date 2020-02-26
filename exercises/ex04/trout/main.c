@@ -1,4 +1,5 @@
 #include "trout.h"
+#include "util.h"
 
 /* variables we might want to configure */
 int max_ttl = 30;

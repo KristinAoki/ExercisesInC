@@ -1,4 +1,5 @@
 #include "trout.h"
+#include "util.h"
 
 void err_doit (int errnoflag, int level, char *fmt, va_list ap)
 {
