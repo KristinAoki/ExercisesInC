@@ -1,35 +1,5 @@
 #include "trout.h"
 
-/* variables we might want to configure */
-int max_ttl = 30;
-int nprobes = 2;
-
-/* other global variables */
-
-int seq = 0;
-
-char recvbuf[BUFSIZE];
-char sendbuf[BUFSIZE];
-Rec *rec = (Rec *) sendbuf;
-
-int sendfd, recvfd;
-int pipefd[2];              /* the pipe for the alarm handler */
-
-Sockaddr *sasend;    /* socket addresses for various purposes */
-Sockaddr *sarecv;
-Sockaddr *salast;
-Sockaddr *sabind;
-
-socklen_t salen;                    /* length of a socket address */
-int datalen = sizeof (Rec);         /* length of the data in a datagram */
-
-u_short sport;                      /* source UDP port # */
-u_short dport = 32768 + 668;        /* destination port -- hopefully unused */
-                                    /* 668 = the neighbor of the beast */
-Timeval sendtv[1];
-Timeval recvtv[1];
-Timeval difftv[1];
-
 /* NOTES: system calls beginning with a capital letter are Stevens's
    wrapper functions.  Each one invokes the method and checks the
    return value.  If the call fails, it invokes err_sys, which prints
