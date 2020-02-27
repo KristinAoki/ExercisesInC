@@ -19,6 +19,7 @@
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
+#include "trout.h"
 
 void err_doit (int errnoflag, int level, char *fmt, va_list ap);
 void err_sys (char *fmt, ...);
