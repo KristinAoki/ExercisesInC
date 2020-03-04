@@ -76,9 +76,48 @@ float my_random_float2()
 }
 
 // compute a random double using my algorithm
+/* This function uses the previously written code as an outline and is readjusted
+   to account for doubles */
 double my_random_double()
 {
-    // TODO: fill this in
+    /* Things that are normally int types must be long because int does not
+       have enough bits for the shifting that we do later */
+    long x, mant;
+    double d;
+    long exp = 1022;
+    int mask = 1;
+
+    union {
+      long i;
+      double d;
+    } b;
+
+    while (1) {
+        // Generate 32 random bits
+        x = random();
+        // Add 32 more bits to existing 'x'
+        x = (x << 32) | random();
+        if (x == 0) {
+            exp -= 63;
+        } else {
+            break;
+        }
+    }
+    // find the location of the first set bit and compute the exponent
+    while (x & mask) {
+        mask <<= 1;
+        exp--;
+    }
+    // exponent space in a double is 11 bits
+    mant = x >> 11;
+
+    // mantissa space in a double is 52 bits
+    b.i = (exp << 52) | mant;
+
+    return b.d;
+
+
+
 }
 
 // return a constant (this is a dummy function for time trials)
@@ -117,10 +156,10 @@ float random_float()
 float random_double()
 {
     int x;
-    double f;
+    double d;
 
     x = random();
-    f = (double) x / (double) RAND_MAX;
+    d = (double) x / (double) RAND_MAX;
 
-    return f;
+    return d;
 }
