@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <time.h>
 #include "rand.h"
 
-main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
     int i;
     double x;
