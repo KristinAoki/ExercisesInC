@@ -8,7 +8,7 @@ License: Creative Commons Attribution-ShareAlike 3.0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <math.h>
 
 // VALUE: represents a value in a key-value pair
 
@@ -178,8 +178,10 @@ int hash_hashable(Hashable *hashable)
 */
 int equal_int (void *ip, void *jp)
 {
-    // FILL THIS IN!
-    return 0;
+    int *i = (int *)ip;
+    int *j = (int *)jp;
+    if (i == j) return 1;
+    else return 0;
 }
 
 
@@ -192,8 +194,10 @@ int equal_int (void *ip, void *jp)
 */
 int equal_string (void *s1, void *s2)
 {
-    // FILL THIS IN!
-    return 0;
+    char *str1 = (char *) s1;
+    char *str2 = (char *) s2;
+    if (strcmp(str1,str2) == 0) return 1;
+    else return 0;
 }
 
 
@@ -207,8 +211,9 @@ int equal_string (void *s1, void *s2)
 */
 int equal_hashable(Hashable *h1, Hashable *h2)
 {
-    // FILL THIS IN!
-    return 0;
+    // using the equal function in the struct determine if the hashables are equal
+    if (h1->equal(h1->key,h2->key))return 1;
+    else return 0;
 }
 
 
@@ -296,7 +301,13 @@ Node *prepend(Hashable *key, Value *value, Node *rest)
 /* Looks up a key and returns the corresponding value, or NULL */
 Value *list_lookup(Node *list, Hashable *key)
 {
-    // FILL THIS IN!
+    while (list != NULL) {
+      // if the key is found return the value
+      if (key == list->key) return list->value;
+
+      // move pointer to next node
+      else list = list->next;
+    }
     return NULL;
 }
 
@@ -341,15 +352,35 @@ void print_map(Map *map)
 /* Adds a key-value pair to a map. */
 void map_add(Map *map, Hashable *key, Value *value)
 {
-    // FILL THIS IN!
+    // find the index of a key
+    int idx = abs(hash_hashable(key)) % map->n;
+    Node *key_list = map->lists[idx];
+
+    // create a new list
+    Node* new_list = malloc(sizeof(Node*));
+
+    // if the key exists append te new value to the list of values
+    if (key_list != NULL) {
+        new_list = prepend(key,value,key_list);
+    } else {
+      // else append the new value to a null node
+        new_list = prepend(key,value,NULL);
+    }
+
+    // reset map lists of the key to the new list
+    map->lists[idx] = new_list;
 }
 
 
 /* Looks up a key and returns the corresponding value, or NULL. */
 Value *map_lookup(Map *map, Hashable *key)
 {
-    // FILL THIS IN!
-    return NULL;
+    // find the index of a key
+    int idx = abs(hash_hashable(key)) % map->n;
+    Node *key_list = map->lists[idx];
+
+    // return the corresponding value using list_lookup
+    return list_lookup(key_list, key);
 }
 
 
