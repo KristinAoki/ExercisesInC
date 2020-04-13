@@ -3,6 +3,12 @@
 Copyright 2016 Allen B. Downey
 License: MIT License https://opensource.org/licenses/MIT
 
+Homework Response:
+  I tested the relationship among parent and children processes in the heap,
+  global, and stack. I malloced an integer in the heap and between creating
+  children I incremented the value. To see the difference I printed the value
+  and address with each child and compared it to the parent. When I first did
+  this I thought there was an error because 
 */
 
 #include <stdio.h>
@@ -18,7 +24,7 @@ License: MIT License https://opensource.org/licenses/MIT
 // errno is an external global variable that contains
 // error information
 extern int errno;
-
+char *lit = "hello";
 
 // get_seconds returns the number of seconds since the
 // beginning of the day, with microsecond precision
@@ -30,10 +36,14 @@ double get_seconds() {
 }
 
 
-void child_code(int i)
+void child_code(int i, int *num)
 {
     sleep(i);
+    int x = 10;
     printf("Hello from child %d.\n", i);
+    printf("malloc() value is %d at address %p in memory\n", *num, num);
+    printf("%s\n", lit);
+    printf("%d\n", x);
 }
 
 // main takes two parameters: argc is the number of command-line
@@ -45,6 +55,9 @@ int main(int argc, char *argv[])
     pid_t pid;
     double start, stop;
     int i, num_children;
+    int *num = malloc(sizeof(int));
+    *num = 1;
+    int x = 5;
 
     // the first command-line argument is the name of the executable.
     // if there is a second, it is the number of children to create.
@@ -58,7 +71,7 @@ int main(int argc, char *argv[])
     start = get_seconds();
 
     for (i=0; i<num_children; i++) {
-
+        *num = *num + 1;
         // create a child process
         printf("Creating child %d.\n", i);
         pid = fork();
@@ -72,8 +85,9 @@ int main(int argc, char *argv[])
 
         /* see if we're the parent or the child */
         if (pid == 0) {
-            child_code(i);
+            child_code(i, num);
             exit(i);
+            // *num = *num + 1;
         }
     }
 
@@ -92,6 +106,10 @@ int main(int argc, char *argv[])
         // check the exit status of the child
         status = WEXITSTATUS(status);
         printf("Child %d exited with error code %d.\n", pid, status);
+        printf("Check relationship of global, heap, and stack variables.\n");
+        printf("malloc() value is %d at address %p in memory\n", *num, num);
+        printf("%s\n", lit);
+        printf("%d\n", x);
     }
     // compute the elapsed time
     stop = get_seconds();
