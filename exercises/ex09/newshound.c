@@ -22,6 +22,13 @@ void error(char *msg)
 
 int main(int argc, char *argv[])
 {
+    pid_t pid;
+    int status;
+    int num_feeds = 5;
+    int i;
+    char *search_phrase = argv[1];
+    char var[255];
+
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <search phrase>\n", argv[0]);
         return 1;
@@ -35,18 +42,38 @@ int main(int argc, char *argv[])
         "http://www.nytimes.com/services/xml/rss/nyt/Europe.xml",
         "http://www.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml"
     };
-    int num_feeds = 5;
-    char *search_phrase = argv[1];
-    char var[255];
 
-    for (int i=0; i<num_feeds; i++) {
+    for (i = 0; i<num_feeds; i++) {
         sprintf(var, "RSS_FEED=%s", feeds[i]);
         char *vars[] = {var, NULL};
+        pid = fork();
 
-        int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
-        if (res == -1) {
-            error("Can't run script.");
+        if (pid == -1){
+          fprintf(stderr, "fork failed: %s\n", strerror(errno));
+          perror(argv[0]);
+          exit(1);
+        }
+        if (!pid) {
+          int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
+          if (res == -1) {
+              fprintf(stderr, "Can't run script: %s\n", strerror(errno));
+              return 1;
+            }
         }
     }
-    return 0;
+
+    for (i=0; i<num_feeds; i++) {
+        pid = wait(&status);
+
+        if (pid == -1) {
+            fprintf(stderr, "wait failed: %s\n", strerror(errno));
+            perror(argv[0]);
+            exit(1);
+        }
+
+        // check the exit status of the child
+        status = WEXITSTATUS(status);
+    }
+
+    return 1;
 }
