@@ -96,7 +96,6 @@ int main(int argc, char *argv[])
         /* see if we're the parent or the child */
         if (pid == 0) {
             child_code(i, num);
-            // printf("%*d%*d",x,' ',y,' ');
             exit(i);
         }
     }
@@ -119,7 +118,7 @@ int main(int argc, char *argv[])
         printf("Check relationship of global, heap, and stack variables.\n");
         printf("malloc() value is %d at address %p in memory\n", *num, num);
         printf("string value is %s at address %p in memory\n", lit, &lit);
-        printf("%d\n", x);
+        // printf("%*d%*d",x,' ',y,' ');
     }
     // compute the elapsed time
     stop = get_seconds();
