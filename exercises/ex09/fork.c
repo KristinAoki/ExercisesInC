@@ -8,7 +8,17 @@ Homework Response:
   global, and stack. I malloced an integer in the heap and between creating
   children I incremented the value. To see the difference I printed the value
   and address with each child and compared it to the parent. When I first did
-  this I thought there was an error because 
+  this I thought there was an error because the value returned from the heap
+  after the parent ran was always the final value from the final child. I realized
+  this was actually ok because the parent ran after all the children so it makes
+  sense that the value it printed was the same as the final child. To test global
+  variables, I created a string literal and made sure that the child and parent
+  printed the same string and they had the same address. To check if the child
+  and parent have a different stack I assigned them local variables and in the
+  main function (line 96) I tried to use a variable from the child, but it
+  threw an error, undefined variable. If the parent and child shared a stack
+  this error would not come up because it woud still be able to access the
+  child's stack and get the variable.
 */
 
 #include <stdio.h>
@@ -42,7 +52,7 @@ void child_code(int i, int *num)
     int x = 10;
     printf("Hello from child %d.\n", i);
     printf("malloc() value is %d at address %p in memory\n", *num, num);
-    printf("%s\n", lit);
+    printf("string value is %s at address %p in memory\n", lit, &lit);
     printf("%d\n", x);
 }
 
@@ -57,7 +67,7 @@ int main(int argc, char *argv[])
     int i, num_children;
     int *num = malloc(sizeof(int));
     *num = 1;
-    int x = 5;
+    int y = 5;
 
     // the first command-line argument is the name of the executable.
     // if there is a second, it is the number of children to create.
@@ -86,8 +96,8 @@ int main(int argc, char *argv[])
         /* see if we're the parent or the child */
         if (pid == 0) {
             child_code(i, num);
+            // printf("%*d%*d",x,' ',y,' ');
             exit(i);
-            // *num = *num + 1;
         }
     }
 
@@ -108,7 +118,7 @@ int main(int argc, char *argv[])
         printf("Child %d exited with error code %d.\n", pid, status);
         printf("Check relationship of global, heap, and stack variables.\n");
         printf("malloc() value is %d at address %p in memory\n", *num, num);
-        printf("%s\n", lit);
+        printf("string value is %s at address %p in memory\n", lit, &lit);
         printf("%d\n", x);
     }
     // compute the elapsed time
