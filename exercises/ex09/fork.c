@@ -15,7 +15,7 @@ Homework Response:
   variables, I created a string literal and made sure that the child and parent
   printed the same string and they had the same address. To check if the child
   and parent have a different stack I assigned them local variables and in the
-  main function (line 121) I tried to use a variable from the child, but it
+  main function (line 56 and 121) I tried to use a variable from the child, but it
   threw an error, undefined variable. If the parent and child shared a stack
   this error would not come up because it woud still be able to access the
   child's stack and get the variable.
@@ -53,7 +53,7 @@ void child_code(int i, int *num)
     printf("Hello from child %d.\n", i);
     printf("malloc() value is %d at address %p in memory\n", *num, num);
     printf("string value is %s at address %p in memory\n", lit, &lit);
-    printf("%d\n", x);
+    // printf("%*d%*d",x,' ',y,' ');
 }
 
 // main takes two parameters: argc is the number of command-line
