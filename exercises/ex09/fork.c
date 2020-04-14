@@ -15,7 +15,7 @@ Homework Response:
   variables, I created a string literal and made sure that the child and parent
   printed the same string and they had the same address. To check if the child
   and parent have a different stack I assigned them local variables and in the
-  main function (line 96) I tried to use a variable from the child, but it
+  main function (line 121) I tried to use a variable from the child, but it
   threw an error, undefined variable. If the parent and child shared a stack
   this error would not come up because it woud still be able to access the
   child's stack and get the variable.
