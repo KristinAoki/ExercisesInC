@@ -19,6 +19,7 @@ Based on an example in Head First C.
 #include <signal.h>
 
 int score = 0;
+int flag = 0;
 
 /* Set up a signal handler.
 
@@ -44,8 +45,9 @@ void end_game(int sig)
 /* Signal handler: Notify the user and raise SIGINT.
 */
 void times_up(int sig) {
-    puts("\nTIME'S UP!");
-    raise(SIGINT);
+    puts("\nLAST QUESTION");
+    //raise(SIGINT);
+    flag = 1;
 }
 
 int main(void) {
@@ -55,8 +57,10 @@ int main(void) {
     // when the alarm goes off, call times_up
     catch_signal(SIGALRM, times_up);
 
+
     // if we get interrupted, end the game
     catch_signal(SIGINT, end_game);
+
 
     // seed the random number generator
     srandom((unsigned int) time(NULL));
@@ -85,6 +89,10 @@ int main(void) {
             printf("\nWrong!\n");
         }
         printf("Score: %i\n", score);
+
+        if (flag) {
+          end_game(0);
+        }
     }
     return 0;
 }
