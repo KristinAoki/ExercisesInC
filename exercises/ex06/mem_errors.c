@@ -33,24 +33,38 @@ int main()
     read_element(array1, 100);
 
     // but it does bounds-check dynamic arrays
-    read_element(array2, -1);
-    read_element(array2, 100);
+
+    // updated indexes to be within bounds of array
+    read_element(array2, 0);
+    read_element(array2, 99);
+
+    // free malloced space for array2
+    free(array2);
 
     // and it catches use after free
-    free(use_after_free);
+
     *use_after_free = 17;
+
+    // moved free to after accessing
+    free(use_after_free);
 
     // never_free is definitely lost
     *never_free = 17;
+
+    // free so that memory is no longer lost
+    free(never_free);
 
     // the following line would generate a warning
     // free(&never_allocated);
 
     // but this one doesn't
-    free_anything(&never_allocated);
+    // never_allocated is not a pointer and has no space allocated
+    // free_anything(&never_allocated);
 
     free(free_twice);
-    free(free_twice);
+
+    // remove the second free of pointer
+    // free(free_twice);
 
     return 0;
 }
