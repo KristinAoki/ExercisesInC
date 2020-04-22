@@ -17,34 +17,52 @@ void error(char *msg)
     exit(1);
 }
 
-void parent_code(int pipe_to_child[])
+void parent_code(int pipe_to_child1[], int pipe_to_child2 [])
 {
     // close the read end of pipe to child
-    close(pipe_to_child[0]);
-
-    // write a string to the child
-    char line[] = "I'm proud of you, child.";
-    ssize_t size = write(pipe_to_child[1], line, strlen(line)+1);
-    if (size == -1)
-        error("Parent can't write to child");
-    printf("Parent wrote %ld bytes\n", size);
-}
-
-
-void child_code(int pipe_to_child[])
-{
-    // close the write end of pipe to child
-    close(pipe_to_child[1]);
+    close(pipe_to_child1[0]);
+    close(pipe_to_child2[1]);
 
     int count = 128;
     char buffer[count];
 
+    // write a string to the child
+    char line[] = "I'm proud of you, child.";
+    ssize_t sizeW = write(pipe_to_child1[1], line, strlen(line)+1);
+    ssize_t sizeR = read(pipe_to_child2[0], buffer, count);
+    if (sizeW == -1)
+        error("Parent can't write to child");
+    printf("Parent wrote %ld bytes\n", sizeW);
+    if (sizeR == -1)
+        error("Parent can't read from child");
+    printf("Parent read %ld bytes.\n", sizeR);
+    printf("Parent read: %s\n", buffer);
+}
+
+
+void child_code(int pipe_to_child1[], int pipe_to_child2 [])
+{
+    // close the write end of pipe to child
+    close(pipe_to_child1[1]);
+    close(pipe_to_child2[0]);
+
+    int count = 128;
+    char buffer[count];
+
+    // write a string to the parent
+    char line[] = "Thanks ma!";
+
     // read from pipe_to_child
-    ssize_t size = read(pipe_to_child[0], buffer, count);
-    if (size == -1)
+    ssize_t sizeR = read(pipe_to_child1[0], buffer, count);
+    ssize_t sizeW = write(pipe_to_child2[1], line, strlen(line)+1);
+    if (sizeR == -1)
         error("Child can't read from parent");
-    printf("Child read %ld bytes.\n", size);
+    printf("Child read %ld bytes.\n", sizeR);
     printf("Child read: %s\n", buffer);
+
+    if (sizeW == -1)
+        error("Child can't write to parent");
+    printf("Child wrote %ld bytes\n", sizeW);
 
     exit(0);
 }
@@ -53,9 +71,13 @@ void child_code(int pipe_to_child[])
 int main(int argc, char *argv[])
 {
     /*Create a pipe */
-    int pipe_to_child[2];
-    if (pipe(pipe_to_child) == -1)
+    int pipe_to_child1[2];
+    if (pipe(pipe_to_child1) == -1)
         error("Can't create the first pipe");
+
+    int pipe_to_child2[2];
+    if (pipe(pipe_to_child2) == -1)
+        error("Can't create the second pipe");
 
     /*Fork a child process*/
     pid_t child_pid = fork();
@@ -63,9 +85,9 @@ int main(int argc, char *argv[])
         error("Can't fork process");
 
     if (child_pid == 0) {
-        child_code(pipe_to_child);
+        child_code(pipe_to_child1, pipe_to_child2);
     } else {
-        parent_code(pipe_to_child);
+        parent_code(pipe_to_child1, pipe_to_child2);
     }
 
     int status;
